@@ -1,0 +1,40 @@
+name: Compile to WASM and deploy game to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write     
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # we have 5 steps
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24.5'
+
+      - name: Build web/ (WASM + assets)
+        run: ./scripts/build_web.sh
+
+      # Take the web/ folder and store it as a "Pages artifact".
+      - name: Upload web/ as GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./web
+
+      # Publish the artifact to gh-pages.
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
