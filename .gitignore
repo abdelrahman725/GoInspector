@@ -1,0 +1,9 @@
+source_assets/
+assets/maps/
+
+reset.go
+testing*.go
+
+web/assets/
+*.wasm
+wasm_exec.js
